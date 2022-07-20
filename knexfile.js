@@ -9,6 +9,7 @@ module.exports = {
         connection.run('PRAGMA foreign_keys = ON', cb);
       }
     },
+    useNullAsDefault: true,
     migrations: {
       directory: __dirname + '/src/databases/migrations'
     }
