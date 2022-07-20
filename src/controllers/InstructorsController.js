@@ -24,7 +24,34 @@ exports.create = async (req, res) => {
   } catch (e) {
     return res.status(500).send({ error: e.message || e });
   }
-}
+};
+
+exports.find = async (req, res) => {
+  try {
+    const Instructors = await knex.select('*').from('Instructors');
+    return res.status(200).send(Instructors);
+  } catch (e) {
+    return res.status(500).send({ error: e?.message || e });
+  }
+};
+
+exports.findById = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const instructor = await knex.select('*').from('instructors').where({id}).first();
+    if(!instructor) {
+      return res.status(404).send({ status: `Professor com id ${id} não foi encontrado` });
+    }
+
+    const instructors = await knex.select('*').from('instructors').where({id});
+    return res.status(200).send({
+      ...instructor
+    });
+  } catch (e) {
+    return res.status(500).send({ error: e?.message || e });
+  }
+};
+
 
 exports.update = async(req, res) => {
   try {
@@ -44,4 +71,19 @@ exports.update = async(req, res) => {
   } catch (e) {
     return res.status(500).send({ error: e?.message || e });
   }
-}
+};
+
+exports.delete = async (req, res) => {
+  try {
+    const {id} = req.params;
+    const [instructor] = await knex.select('*').from('s').where({id}).first(); 
+
+    if(!instructor) {
+      return res.status(404).send(`O curso com id: ${id} não existe`);
+    }
+    await knex.delete({fullName: instructor.fullName}).from('instructors').where({id});
+    return res.status(200).send({ status:'Professor deletado com sucesso', data: instructor});
+  } catch (e) {
+    return res.status(500).send({ error: e?.message || e });
+  }
+};
