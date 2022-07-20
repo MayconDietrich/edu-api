@@ -78,6 +78,16 @@ exports.create = async (req, res) => {
   }
 };
 
+exports.find = async (req, res) => {
+  try {
+    const courses = await knex.select('*').from('lessons');
+    return res.status(200).send(courses);
+  } catch (e) {
+    return res.status(500).send({ error: e?.message || e });
+  }
+};
+
+
 exports.findById = async (req, res) => {
   try {
     const id = req.params.id;
@@ -86,7 +96,16 @@ exports.findById = async (req, res) => {
       return res.status(404).send({ status: `Aula com id ${id} não foi encontrada` });
     }
 
-    const instructor = await knex.select('*').from('instructors').where({id});
+    const [instructor] = await knex.select('*').from('instructors').where({id: lesson.instructorId});
+    delete instructor.id;
+
+    delete lesson.instructorId;
+    delete lesson.courseId;
+
+    // define um avatar padrão se não existir
+    if(!instructor.avatarUrl) {
+      instructor.avatarUrl = 'https://avatars.dicebear.com/api/bottts/your-custom-seed.svg'
+    }
     return res.status(200).send({
       ...lesson,
       instructor
