@@ -13,6 +13,7 @@ routes.get('/', IndexController.index);
 routes.post('/courses', CoursesController.create);
 routes.get('/courses', CoursesController.find);
 routes.get('/courses/:id', CoursesController.findById);
+routes.patch('/courses/:id', CoursesController.update);
 
 routes.post('/instructors', InstructorsController.create);
 
