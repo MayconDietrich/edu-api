@@ -16,6 +16,7 @@ routes.get('/courses/:id', CoursesController.findById);
 routes.patch('/courses/:id', CoursesController.update);
 
 routes.post('/instructors', InstructorsController.create);
+routes.patch('/instructors/:id', InstructorsController.update);
 
 routes.post('/lessons', LessonsController.create);
 routes.get('/lessons/', LessonsController.find);
