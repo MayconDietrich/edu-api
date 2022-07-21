@@ -144,7 +144,7 @@ exports.delete = async (req, res) => {
       return res.status(404).send(`A aula com id: ${id} não existe`);
     }
     await knex.delete({title: lesson.title}).from('lessons').where({id: lesson.id});
-    return res.status(200).send({ status:'Aula deletada com sucesso', data: lesson});
+    return res.status(204).send({ status:'Aula deletada com sucesso', data: lesson});
   } catch (e) {
     return res.status(500).send({ error: e?.message || e });
   }
